@@ -1,0 +1,5 @@
+#!ipxe
+
+dhcp
+
+chain settings.ipxe ||

@@ -9,7 +9,7 @@ In the scenario of multiple installations, PXE netboot can save your life.
 This article will show you how to set up Ubuntu as a PXE boot Server step by step
 
 ### Prerequisites
-1. Storage Server for OS image 
+1. Storage Server for OS image
 2. DHCP Server -> use Windows DHCP
 3. disable all of firewall
 
@@ -39,7 +39,8 @@ Role: Client with DHCP IP
 2. Install and Configure TFTP -> Dnsmasq
 3. Clone iPXE from git and Configure
 4. DHCP assign IP and bootfile for TFTP (using Windows DHCP) 
-5. Perform PXE Boot
+5. Perform PXE Boot and check it works
+6. Finish up
 
 ### Step by step
 
@@ -136,9 +137,58 @@ Note, in fact you make Dnsmasq as a DHCP/TDTP server, but I already had Windows 
     tftp-root=/var/www/ds
     ```
 5. Verify that TFTP service is working, similar command like below, and you may need to install tftp client by yourself
-``` 
-> tftp 127.0.0.1 -c get a # get file a from tftp root, need to create file first
-```
+    ``` 
+    > tftp 127.0.0.1 -c get a # get file a from tftp root, need to create file first
+    ```
+
+#### Clone iPXE from git and Configure
+
+1. Make your iPXE source code
+2. Make your folder, such as below
+    ```
+    ./var/www/    -> apache2 http root
+    ├── ds        -> dnsmasq tftp root
+    │   ├── menu    -> every menu have menu
+    │   │   ├── linux
+    │   │   │   ├── centos
+    │   │   │   │   └── __init__.menu
+    │   │   │   ├── redhat
+    │   │   │   │   └── __init__.menu
+    │   │   │   ├── ubuntu
+    │   │   │   │   └── __init__.menu
+    │   │   │   └── __init__.menu
+    │   │   ├── windows
+    │   │   └── __init__.menu
+    │   ├── os_images
+    │   ├── src
+    │   │   └── ipxe-master
+    │   ├── boot.cfg
+    │   ├── ipxe.efi
+    │   ├── snponly.efi.kpxe
+    │   └── undionly.kpxe
+    ├── html
+    │   └── index.html
+    └── index.html
+    ```
+
+#### DHCP assign IP and bootfile for TFTP (using Windows DHCP)
+
+Since DHCP settings are not the focus of this article, only screenshots and brief descriptions are provided.
+
+Use Windows DHCP to set parameters such as TFTP 066 IP, 067 Bootfile name, 003 router, etc.
+
+![](https://i.imgur.com/P2fPrzB.png =500x)
+
+Also, you may notice that the Legacy policy has another policy set, because installing with WDS will give you the `Windows Deployment Services: PXE Boot Aborted.` error, as [this article](https://www.mail-archive.com/seabios@seabios.org/msg11892.html).
+
+For how to fix the problem, just `disable NetBios over TCPIP, on the WDS server`, you can refer to [here](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/disable-netbios-tcp-ip-using-dhcp) or [here](https://www.manageengine.com/vulnerability-management/misconfiguration/legacy-protocols/how-to-disable-netBios-over-tcp-ip.html), if you need.
+
+
+#### Perform PXE Boot and check it works
+
+
+#### Finish up
+
 
 ### Reference article
 
@@ -150,4 +200,9 @@ Note, in fact you make Dnsmasq as a DHCP/TDTP server, but I already had Windows 
 > Here Why not using kickstart? and How to use cloud-init or auto-install?
 > 
 > [How to generate cloud-init user-data file for Ubuntu](https://www.golinuxcloud.com/generate-user-data-file-ubuntu-20-04/)
-> nice
+> Nice guy! you are expert！
+> 
+> :arrow_down: 
+> [Build iPXE and make menu - 1](https://doc.rogerwhittaker.org.uk/ipxe-installation-and-EFI/)
+> [Build iPXE and make menu - 2](https://gist.github.com/rikka0w0/50895b82cbec8a3a1e8c7707479824c1)
+> [Build iPXE and make menu - 3](https://blog.open4j.com/2019/05/30/ipxe-build-embedded-script/)
