@@ -1,0 +1,39 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+:redhat_menu
+menu ${distribution}
+item
+
+item --gap --                           --- OS installation ---
+
+item redhat8_5_0                        Install ${distribution} 8.5.0
+
+item redhat8_6_0                        Install ${distribution} 8.6.0
+item
+
+
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+goto ${selected}
+
+###################### Defined Command ######################
+
+
+
+
+# redhat 8.5.0 -> legacy and uefi hang out
+:redhat8_5_0
+initrd http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/initrd.img
+kernel http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/vmlinuz initrd=initrd.img inst.repo=http://192.168.87.8/ds/images_file/redhat/8_5_0
+shell
+boot || goto failed
+
+
+# redhat 8.6.0 -> uefi pass, legacy hang out on multipath siblings of sda
+:redhat8_6_0
+initrd http://192.168.87.8/ds/images_file/redhat/8_6_0/images/pxeboot/initrd.img
+kernel http://192.168.87.8/ds/images_file/redhat/8_6_0/images/pxeboot/vmlinuz initrd=initrd.img inst.repo=http://192.168.87.8/ds/images_file/redhat/8_6_0/
+shell
+boot || goto failed
+

@@ -8,7 +8,8 @@ item
 
 item --gap --                           --- OS installation ---
 
-item ubuntu                                     Install Ubuntu
+item --key u ubuntu                             Install Ubuntu
+item --key r redhat				Install Redhat
 item
 
 
@@ -20,5 +21,10 @@ goto ${selected}
 
 :ubuntu
 set distribution ubuntu
+
+:redhat
+set distribution redhat
+
 chain ${http-menu-url}/linux/${distribution}/menu.ipxe || goto failed
+
 

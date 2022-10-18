@@ -1,7 +1,5 @@
 #!ipxe
 
-set linux Ubuntu
-
 ###################### MAIN MENU ######################
 
 :ubuntu_menu
@@ -22,8 +20,8 @@ goto ${selected}
 
 # ubuntu 22.04 LTS iso not auto
 :ubuntu2204
-initrd http://192.168.87.8/ds/images_file/ubuntu/ubuntu2204_1/casper/initrd
-kernel http://192.168.87.8/ds/images_file/ubuntu/ubuntu2204_1/casper/vmlinuz
+initrd http://192.168.87.8/ds/images_file/ubuntu/22_04_1/casper/initrd
+kernel http://192.168.87.8/ds/images_file/ubuntu/22_04_1/casper/vmlinuz
 imgargs vmlinuz root=/dev/ram0 boot=casper initrd=initrd ip=dhcp netboot=url url=http://192.168.87.8/ds/images/ubuntu-22.04.1-desktop-amd64.iso
 boot || goto failed
 
