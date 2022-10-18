@@ -1,0 +1,24 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+:linux_menu
+menu Linux
+item
+
+item --gap --                           --- OS installation ---
+
+item ubuntu                                     Install Ubuntu
+item
+
+
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto main_menu
+goto ${selected}
+
+###################### Defined Command ######################
+
+
+:ubuntu
+set distribution ubuntu
+chain ${http-menu-url}/linux/${distribution}/menu.ipxe || goto failed
+
