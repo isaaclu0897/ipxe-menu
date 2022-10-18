@@ -1,0 +1,61 @@
+#!ipxe
+
+
+###################### MAIN MENU ######################
+
+:main_menu
+menu Welcome to iPXE Deployment Service
+item
+
+item --gap --                           --- OS installation ---
+
+item --key w windows			Install WINDOWS
+item --key l linux                      Install LINUX (RHEL, SUSE ...)
+item
+
+item --gap --                           --- Advanced options ---
+item --key c config                     show system information
+item --key s shell                      drop to iPXE shell
+item --key r reboot                     reboot system
+
+item
+item --key 0x08 exit        		Exit Service and continue boot
+
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+goto ${selected}
+
+###################### Defined Command ######################
+
+:config
+config
+goto main_menu
+
+:back
+goto main_menu
+
+:cancel
+echo You cancelled the menu, dropping to shell
+
+:shell
+echo Type 'exit', back to the main menu
+shell
+goto main_menu
+
+:failed
+echo Booting failed, drop to iPXE shell
+goto shell
+
+:reboot
+reboot
+
+:exit
+exit
+
+############ MAIN MENU ITEMS ############
+
+:windows
+chain ${tftp-boot-url}\x64\wdsmgfw.efi || goto failed
+
+:linux
+chain ${http-menu-url}/linux/menu.ipxe || goto failed
+

@@ -1,0 +1,14 @@
+#!ipxe
+
+# Variables are specified in boot.ipxe.cfg
+set tftp-url tftp://192.168.87.10		# tftp root
+set tftp-boot-url ${tftp-url}/boot		# tftp root/boot
+set http-url http://192.168.87.8		# /var/www
+set http-menu-url ${http-url}/ds/menu		# /var/www/ds/menu
+
+# Some menu defaults
+set menu-timeout 0 # 60000
+set submenu-timeout ${menu-timeout}
+isset ${menu-default} || set menu-default exit
+
+chain ${http-menu-url}/menu.ipxe
