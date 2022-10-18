@@ -143,33 +143,71 @@ Note, in fact you make Dnsmasq as a DHCP/TDTP server, but I already had Windows 
 
 #### Clone iPXE from git and Configure
 
-1. Make your iPXE source code
-2. Make your folder, such as below
+1. Get iPXE source code
+    ```bash
+    > git clone git://git.ipxe.org/ipxe.git
     ```
-    ./var/www/    -> apache2 http root
-    ├── ds        -> dnsmasq tftp root
-    │   ├── menu    -> every menu have menu
-    │   │   ├── linux
-    │   │   │   ├── centos
-    │   │   │   │   └── __init__.menu
-    │   │   │   ├── redhat
-    │   │   │   │   └── __init__.menu
-    │   │   │   ├── ubuntu
-    │   │   │   │   └── __init__.menu
-    │   │   │   └── __init__.menu
-    │   │   ├── windows
-    │   │   └── __init__.menu
-    │   ├── os_images
-    │   ├── src
-    │   │   └── ipxe-master
-    │   ├── boot.cfg
-    │   ├── ipxe.efi
-    │   ├── snponly.efi.kpxe
-    │   └── undionly.kpxe
-    ├── html
-    │   └── index.html
-    └── index.html
+2. (Option) Before you make src, you may need to install some package, such as `make` `gcc`, [see more](https://ipxe.org/download)
+    ```bash
+    > apt install make gcc liblzma-dev mtools -y
     ```
+3. Befor you make src, need to create a iPXE script that will become chain another iPXE srcipt
+    ```
+    > vim script.ipxe
+    #!ipxe
+
+    dhcp
+
+    chain settings.ipxe ||
+    ```
+4. Make your iPXE source code, below is how to compile x64 legacy and efi binaries, [see more](https://ipxe.org/download).
+    ```bash
+    > cd src
+    > make -j 16 bin-x86_64-pcbios/undionly.kpxe EMBED=../script.ipxe
+    > make -j 16 bin-x86_64-efi/{ipxe.efi,snponly.efi} EMBED=../script.ipxe
+    ```
+5. link iPXE binary to tftp root
+    ```bash
+    > ln -snf src/bin-x86_64-pcbios/undionly.kpxe undionly.kpxe
+    > ln -snf src/bin-x86_64-efi/ipxe.efi ipxe.efi
+    > ln -snf src/bin-x86_64-efi/snponly.efi snponly.efi
+    ```
+6. Make your file and folder, such as `autoinstall` `menu` `os_images` `settings.ipxe`, then your foler struction will such as below.
+    Directory Structure:
+    * `/var/www`: HTTP root
+    * `/var/www/ds` : TFTP and iPXE root
+    * `/var/www/ds/menu` : iPXE menu, each menu has a `menu.ipxe` as the startup menu
+    * `/var/www/ds/os_images` : the location where the os image is stored
+    * `/var/www/ds/settings.ipxe` : as the script for the initial startup of ipxe
+    ```
+    # tree -I 'src|html' --dirsfirst /var/www/
+    /var/www/
+    └── ds
+        ├── autoinstall
+        ├── menu
+        │   ├── linux
+        │   │   ├── centos
+        │   │   │   └── menu.ipxe
+        │   │   ├── redhat
+        │   │   │   └── menu.ipxe
+        │   │   ├── ubuntu
+        │   │   │   └── menu.ipxe
+        │   │   └── menu.ipxa
+        │   ├── windows
+        │   │   └── menu.ipxe
+        │   └── menu.ipxe
+        ├── os_images
+        ├── automake.sh
+        ├── ipxe.efi -> src/bin-x86_64-efi/ipxe.efi
+        ├── README
+        ├── script.ipxe
+        ├── settings.ipxe
+        ├── snponly.efi -> src/bin-x86_64-efi/snponly.efi
+        └── undionly.kpxe -> src/bin-x86_64-pcbios/undionly.kpxe
+    ```
+7. 
+
+
 
 #### DHCP assign IP and bootfile for TFTP (using Windows DHCP)
 
