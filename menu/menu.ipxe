@@ -17,36 +17,35 @@ item --gap --                           --- Advanced options ---
 item --key c config                     show system information
 item --key s shell                      drop to iPXE shell
 item --key r reboot                     reboot system
+item reload				reload iPXE
 
 item
 item --key 0x08 exit        		Exit Service and continue boot
 
-choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto main_menu # if you cancel it, you will back to main menu
 goto ${selected}
 
 ###################### Defined Command ######################
 
 :config
 config
-goto main_menu
-
-:back
-goto main_menu
-
-:cancel
-echo You cancelled the menu, dropping to shell
-
-:shell
-echo Type 'exit', back to the main menu
-shell
-goto main_menu
+goto back
 
 :failed
 echo Booting failed, drop to iPXE shell
-goto shell
+# then keep going to shell
+:shell
+echo Type 'exit', back to the main menu
+shell
+# then keep going to back
+:back
+goto main_menu
 
 :reboot
 reboot
+
+:reload
+chain ${http-menu-url}/menu.ipxe
 
 :exit
 exit
