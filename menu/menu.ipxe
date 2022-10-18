@@ -54,6 +54,8 @@ exit
 ############ MAIN MENU ITEMS ############
 
 :windows
+set net0/next-server 192.168.87.10
+set net0/filename boot\x64\wdsmgfw.efi
 chain ${tftp-boot-url}\x64\wdsmgfw.efi || goto failed
 
 :linux
