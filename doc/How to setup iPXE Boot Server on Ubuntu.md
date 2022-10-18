@@ -1,4 +1,4 @@
-How to setup iPXE Boot Server on Ubuntu
+How to setup PXE Boot Server on Ubuntu (using iPXE)
 ===
 
 [TOC]
@@ -41,6 +41,9 @@ Role: Client with DHCP IP
 4. DHCP assign IP and bootfile for TFTP (using Windows DHCP) 
 5. Perform PXE Boot and check it works
 6. Finish up
+
+pxe boot process
+![](https://i.imgur.com/mfyBXG0.png =500x)
 
 ### Step by step
 
@@ -281,10 +284,13 @@ Note, in fact you make Dnsmasq as a DHCP/TDTP server, but I already had Windows 
     ############ MAIN MENU ITEMS ############
 
     :windows
+    set net0/next-server 192.168.87.10
+    set net0/filename boot\x64\wdsmgfw.efi
     chain ${tftp-boot-url}\x64\wdsmgfw.efi || goto failed
 
     :linux
     chain ${http-menu-url}/linux/menu.ipxe || goto failed
+
     ```
 
 
