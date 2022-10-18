@@ -302,10 +302,6 @@ Use Windows DHCP to set parameters such as TFTP 066 IP, 067 Bootfile name, 003 r
 
 ![](https://i.imgur.com/P2fPrzB.png =500x)
 
-Also, you may notice that the Legacy policy has another policy set, because installing with WDS will give you the `Windows Deployment Services: PXE Boot Aborted.` error, as [this article](https://www.mail-archive.com/seabios@seabios.org/msg11892.html).
-
-For how to fix the problem, just `disable NetBios over TCPIP, on the WDS server`, you can refer to [here](https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/disable-netbios-tcp-ip-using-dhcp) or [here](https://www.manageengine.com/vulnerability-management/misconfiguration/legacy-protocols/how-to-disable-netBios-over-tcp-ip.html), if you need.
-
 
 #### Perform PXE Boot and check it works
 ![](https://i.imgur.com/P0HERsr.png =500x)
