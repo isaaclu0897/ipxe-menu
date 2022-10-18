@@ -205,8 +205,87 @@ Note, in fact you make Dnsmasq as a DHCP/TDTP server, but I already had Windows 
         ├── snponly.efi -> src/bin-x86_64-efi/snponly.efi
         └── undionly.kpxe -> src/bin-x86_64-pcbios/undionly.kpxe
     ```
-7. 
+7. Let's make a simple menu to get started
+    ```
+    > vim settings.ipxe
+    #!ipxe
 
+    # Variables are specified in boot.ipxe.cfg
+    set tftp-url tftp://192.168.87.10               # tftp root
+    set tftp-boot-url ${tftp-url}/boot              # tftp root/boot
+    set http-url http://192.168.87.8                # /var/www
+    set http-menu-url ${http-url}/ds/menu           # /var/www/ds/menu
+
+    # Some menu defaults
+    set menu-timeout 0 # 60000
+    set submenu-timeout ${menu-timeout}
+    isset ${menu-default} || set menu-default exit
+
+    chain ${http-menu-url}/menu.ipxe
+    ```
+    ```
+    > vim menu/menu.ipxe
+    #!ipxe
+
+
+    ###################### MAIN MENU ######################
+
+    :main_menu
+    menu Welcome to iPXE Deployment Service
+    item
+
+    item --gap --                           --- OS installation ---
+
+    item --key w windows                    Install WINDOWS
+    item --key l linux                      Install LINUX (RHEL, SUSE ...)
+    item
+
+    item --gap --                           --- Advanced options ---
+    item --key c config                     show system information
+    item --key s shell                      drop to iPXE shell
+    item --key r reboot                     reboot system
+
+    item
+    item --key 0x08 exit                    Exit Service and continue boot
+
+    choose --timeout ${menu-timeout} --default ${menu-default} selected || goto cancel
+    goto ${selected}
+
+    ###################### Defined Command ######################
+
+    :config
+    config
+    goto main_menu
+
+    :back
+    goto main_menu
+
+    :cancel
+    echo You cancelled the menu, dropping to shell
+
+    :shell
+    echo Type 'exit', back to the main menu
+    shell
+    goto main_menu
+
+    :failed
+    echo Booting failed, drop to iPXE shell
+    goto shell
+
+    :reboot
+    reboot
+
+    :exit
+    exit
+
+    ############ MAIN MENU ITEMS ############
+
+    :windows
+    chain ${tftp-boot-url}\x64\wdsmgfw.efi || goto failed
+
+    :linux
+    chain ${http-menu-url}/linux/menu.ipxe || goto failed
+    ```
 
 
 #### DHCP assign IP and bootfile for TFTP (using Windows DHCP)
@@ -223,9 +302,11 @@ For how to fix the problem, just `disable NetBios over TCPIP, on the WDS server`
 
 
 #### Perform PXE Boot and check it works
+![](https://i.imgur.com/P0HERsr.png =500x)
 
 
 #### Finish up
+![](https://i.imgur.com/lMeRq4T.png =500x)
 
 
 ### Reference article
