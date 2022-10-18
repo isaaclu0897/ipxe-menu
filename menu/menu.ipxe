@@ -4,7 +4,7 @@
 ###################### MAIN MENU ######################
 
 :main_menu
-menu Welcome to iPXE Deployment Service
+menu Welcome to iPXE Deployment Service support for platform ${platform}
 item
 
 item --gap --                           --- OS installation ---
@@ -54,6 +54,16 @@ exit
 ############ MAIN MENU ITEMS ############
 
 :windows
+iseq ${platform} pcbios && goto windows-pcbios ||
+iseq ${platform} efi && goto windows-efi ||
+goto failed
+
+:windows-pcbios
+set net0/next-server 192.168.87.10
+set net0/filename boot\x64\wdsnbp.com
+chain ${tftp-boot-url}\x64\wdsnbp.com || goto failed
+
+:windows-efi
 set net0/next-server 192.168.87.10
 set net0/filename boot\x64\wdsmgfw.efi
 chain ${tftp-boot-url}\x64\wdsmgfw.efi || goto failed
