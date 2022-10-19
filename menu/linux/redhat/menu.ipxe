@@ -20,20 +20,23 @@ goto ${selected}
 ###################### Defined Command ######################
 
 
-
-
 # redhat 8.5.0 -> legacy and uefi hang out
 :redhat8_5_0
-initrd http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/initrd.img
-kernel http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/vmlinuz initrd=initrd.img inst.repo=http://192.168.87.8/ds/images_file/redhat/8_5_0
-shell
-boot || goto failed
-
+set version 8_5_0
 
 # redhat 8.6.0 -> uefi pass, legacy hang out on multipath siblings of sda
 :redhat8_6_0
-initrd http://192.168.87.8/ds/images_file/redhat/8_6_0/images/pxeboot/initrd.img
-kernel http://192.168.87.8/ds/images_file/redhat/8_6_0/images/pxeboot/vmlinuz initrd=initrd.img inst.repo=http://192.168.87.8/ds/images_file/redhat/8_6_0/
-shell
-boot || goto failed
+set version 8_6_0
 
+# rehat set url 
+set initrd-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img
+set kernel-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/vmlinuz
+set repo-url ${http-images-file-url}/${distribution}/${version}
+
+# redhat common command like below
+# initrd http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/initrd.img
+# kernel http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/vmlinuz initrd=initrd.img inst.repo=http://192.168.87.8/ds/images_file/redhat/8_5_0
+# boot
+initrd ${initrd-url}
+kernel ${kernel-url}  initrd=initrd.img inst.repo=${repo-url}
+boot || goto failed
