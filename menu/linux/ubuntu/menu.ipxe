@@ -18,7 +18,7 @@ goto ${selected}
 ###################### Defined Command ######################
 
 
-# ubuntu 22.04 LTS iso not auto
+# ubuntu 22.04 LTS -> uefi pass, legacy failed 
 :ubuntu2204
 initrd http://192.168.87.8/ds/images_file/ubuntu/22_04_1/casper/initrd
 kernel http://192.168.87.8/ds/images_file/ubuntu/22_04_1/casper/vmlinuz

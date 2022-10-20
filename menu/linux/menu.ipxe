@@ -21,10 +21,13 @@ goto ${selected}
 
 :ubuntu
 set distribution ubuntu
+goto chain_linux_distribution
 
 :redhat
 set distribution redhat
+goto chain_linux_distribution
 
+:chain_linux_distribution
 chain ${http-menu-url}/linux/${distribution}/menu.ipxe || goto failed
 
 
