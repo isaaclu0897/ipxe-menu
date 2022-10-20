@@ -58,7 +58,7 @@ set version 9_1_0
 # redhat set url
 set initrd-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img
 set kernel-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/vmlinuz
-set autoinstall-url ${http-autoinstall-url}/${distribution}/${version}/install.cfg
+set autoinstall-url ${http-autoinstall-url}/${distribution}/${version}/anaconda-ks.cfg
 
 # boot
 # redhat common command like below
@@ -66,5 +66,4 @@ set autoinstall-url ${http-autoinstall-url}/${distribution}/${version}/install.c
 # kernel http://192.168.87.8/ds/images_file/redhat/9_1_0/images/pxeboot/vmlinuz initrd=initrd.img inst.ks=http://192.168.87.8/ds/autoinstall/redhat/9_1_0/install.cfg
 initrd ${initrd-url}
 kernel ${kernel-url}  initrd=initrd.img inst.ks=${autoinstall-url}
-shell || goto failed
 boot || goto failed
