@@ -11,6 +11,12 @@ item --gap --                           --- OS installation ---
 item redhat8_5_0                        Install ${distribution} 8.5.0
 
 item redhat8_6_0                        Install ${distribution} 8.6.0
+
+item redhat9_1_0                        Install ${distribution} 9.1.0
+
+item redhat9_1_0_auto                   Install ${distribution} 9.1.0 auto
+
+
 item
 
 
@@ -28,15 +34,37 @@ set version 8_5_0
 :redhat8_6_0
 set version 8_6_0
 
+# redhat 9.1.0 -> uefi pass, legacy hang out on multipath ...
+:redhat9_1_0
+set version 9_1_0
 # rehat set url 
 set initrd-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img
 set kernel-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/vmlinuz
 set repo-url ${http-images-file-url}/${distribution}/${version}
 
+# boot
 # redhat common command like below
 # initrd http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/initrd.img
 # kernel http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/vmlinuz initrd=initrd.img inst.repo=http://192.168.87.8/ds/images_file/redhat/8_5_0
-# boot
 initrd ${initrd-url}
-kernel ${kernel-url}  initrd=initrd.img inst.repo=${repo-url}
+kernel ${kernel-url} initrd=${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img inst.repo=${repo-url}
+boot || goto failed
+
+# auto
+# redhat 9.1.0 -> uefi pass, legacy hang out on multipath ...
+:redhat9_1_0_auto
+set version 9_1_0
+
+# redhat set url
+set initrd-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img
+set kernel-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/vmlinuz
+set autoinstall-url ${http-autoinstall-url}/${distribution}/${version}/install.cfg
+
+# boot
+# redhat common command like below
+# initrd http://192.168.87.8/ds/images_file/redhat/9_1_0/images/pxeboot/initrd.img
+# kernel http://192.168.87.8/ds/images_file/redhat/9_1_0/images/pxeboot/vmlinuz initrd=initrd.img inst.ks=http://192.168.87.8/ds/autoinstall/redhat/9_1_0/install.cfg
+initrd ${initrd-url}
+kernel ${kernel-url}  initrd=initrd.img inst.ks=${autoinstall-url}
+shell || goto failed
 boot || goto failed
