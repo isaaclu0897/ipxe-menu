@@ -8,9 +8,12 @@ menu Welcome to iPXE Deployment Service support for platform ${platform}
 item
 
 item --gap --                           --- OS installation ---
-
 item --key w windows			Install WINDOWS
 item --key l linux                      Install LINUX (RHEL, SUSE ...)
+item
+
+item --gap --				--- Tools ---
+item gparted				Gparted
 item
 
 item --gap --                           --- Advanced options ---
@@ -70,3 +73,24 @@ chain ${tftp-boot-url}\x64\wdsmgfw.efi || goto failed
 :linux
 chain ${http-menu-url}/linux/menu.ipxe || goto failed
 
+# gparted -> uefi pass, legacy failed
+:gparted
+echo Booting Gparted Live
+kernel ${http-images-file-url}/gparted/1_4_0_5/live/vmlinuz initrd=initrd.img boot=live config components union=overlay username=user noswap noeject vga=788 fetch=${http-images-file-url}/gparted/1_4_0_5/live/filesystem.squashfs
+initrd ${http-images-file-url}/gparted/1_4_0_5/live/initrd.img
+shell || goto failed
+boot || goto failed
+
+
+# root@ubuntu-Virtual-Machine:/var/www/ds# ll images_file/gparted/1_4_0_5/live/
+# total 450031
+# dr-xr-xr-x 1 root root      2048  七  15 07:48 ./
+# dr-xr-xr-x 1 root root      2048  七  15 07:48 ../
+# -r--r--r-- 1 root root     17270  七  15 07:39 filesystem.packages
+# -r--r--r-- 1 root root        93  七  15 07:39 filesystem.packages-remove
+# -r--r--r-- 1 root root 413302784  七  15 07:39 filesystem.squashfs
+# -r--r--r-- 1 root root       872  七  15 07:48 GParted-Live-Version
+# -r--r--r-- 1 root root  39813692  七  15 07:39 initrd.img
+# -r--r--r-- 1 root root    182704  六  26  2015 memtest
+# -r--r--r-- 1 root root   7508256  六  17 05:40 vmlinuz
+# 
