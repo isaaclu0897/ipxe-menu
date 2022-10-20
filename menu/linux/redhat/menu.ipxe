@@ -30,7 +30,7 @@ goto ${selected}
 :redhat8_5_0
 set version 8_5_0
 
-# redhat 8.6.0 -> uefi pass, legacy hang out on multipath siblings of sda
+# redhat 8.6.0 -> uefi pass, legacy hang out on multipath siblings of sda. 
 :redhat8_6_0
 set version 8_6_0
 
@@ -47,7 +47,7 @@ set repo-url ${http-images-file-url}/${distribution}/${version}
 # initrd http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/initrd.img
 # kernel http://192.168.87.8/ds/images_file/redhat/8_5_0/images/pxeboot/vmlinuz initrd=initrd.img inst.repo=http://192.168.87.8/ds/images_file/redhat/8_5_0
 initrd ${initrd-url}
-kernel ${kernel-url} initrd=${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img inst.repo=${repo-url}
+kernel ${kernel-url} initrd=initrd.img inst.repo=${repo-url}
 boot || goto failed
 
 # auto

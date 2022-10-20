@@ -81,6 +81,14 @@ initrd ${http-images-file-url}/gparted/1_4_0_5/live/initrd.img
 shell || goto failed
 boot || goto failed
 
+# Note (important)
+# In the HyperV, I used legacy network adapter as PXE client boot network,
+# but ... it is always failed at the stage of linux kernel boot, no matter is ubuntu redhat gparted
+# -> you need to know it will successed on the real machine
+# 
+# Finally, I try to add network adapter on the hyperV, so the VM has two network interface,
+# actually I don't know why! But ... it works haha...,
+# if you have the same situation as me, maybe you can try to add a extra network
 
 # root@ubuntu-Virtual-Machine:/var/www/ds# ll images_file/gparted/1_4_0_5/live/
 # total 450031
