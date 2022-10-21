@@ -29,14 +29,19 @@ goto ${selected}
 # redhat 8.5.0 -> legacy and uefi hang out
 :redhat8_5_0
 set version 8_5_0
+goto redhat
 
 # redhat 8.6.0 -> uefi pass, legacy hang out on multipath siblings of sda. 
 :redhat8_6_0
 set version 8_6_0
+goto redhat
 
 # redhat 9.1.0 -> uefi pass, legacy hang out on multipath ...
 :redhat9_1_0
 set version 9_1_0
+goto redhat
+
+:redhat
 # rehat set url 
 set initrd-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img
 set kernel-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/vmlinuz
@@ -54,7 +59,9 @@ boot || goto failed
 # redhat 9.1.0 -> uefi pass, legacy hang out on multipath ...
 :redhat9_1_0_auto
 set version 9_1_0
+goto redhat_auto
 
+:redhat_auto
 # redhat set url
 set initrd-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img
 set kernel-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/vmlinuz

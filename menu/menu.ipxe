@@ -78,7 +78,6 @@ chain ${http-menu-url}/linux/menu.ipxe || goto failed
 echo Booting Gparted Live
 kernel ${http-images-file-url}/gparted/1_4_0_5/live/vmlinuz initrd=initrd.img boot=live config components union=overlay username=user noswap noeject vga=788 fetch=${http-images-file-url}/gparted/1_4_0_5/live/filesystem.squashfs
 initrd ${http-images-file-url}/gparted/1_4_0_5/live/initrd.img
-shell || goto failed
 boot || goto failed
 
 # Note (important)

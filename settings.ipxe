@@ -7,6 +7,7 @@ set http-url http://192.168.87.8			# /var/www
 set http-menu-url ${http-url}/ds/menu			# /var/www/ds/menu
 set http-images-url ${http-url}/ds/images		# /var/www/ds/images
 set http-images-file-url ${http-url}/ds/images_file	# /var/www/ds/images_file
+set http-autoinstall-url ${http-url}/ds/autoinstall	# /var/www/ds/autoinstall
 
 # Some menu defaults
 set menu-timeout 0 # 60000
