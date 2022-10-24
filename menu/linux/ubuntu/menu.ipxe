@@ -8,7 +8,12 @@ item
 
 item --gap --                           --- OS installation ---
 
-item ubuntu2204                         Install ${distribution} 22.04 LTS
+item ubuntu_22_04_01                    Install ${distribution} 22.04 LTS desktop
+
+item ubuntu_22_04_01_live_server        Install ${distribution} 22.04 LTS live-server
+
+item ubuntu_22_04_01_live_server_auto   Install ${distribution} 22.04 LTS live-server auto
+
 item
 
 
@@ -18,11 +23,27 @@ goto ${selected}
 ###################### Defined Command ######################
 
 
-# ubuntu 22.04 LTS -> uefi pass, legacy failed 
-:ubuntu2204
+# ubuntu 22.04 LTS desktop -> uefi pass, legacy failed 
+:ubuntu_22_04_01
 initrd http://192.168.87.8/ds/images_file/ubuntu/22_04_1/casper/initrd
 kernel http://192.168.87.8/ds/images_file/ubuntu/22_04_1/casper/vmlinuz
 imgargs vmlinuz root=/dev/ram0 boot=casper initrd=initrd ip=dhcp netboot=url url=http://192.168.87.8/ds/images/ubuntu-22.04.1-desktop-amd64.iso
 boot || goto failed
 
+# important cloud-init can not support for ubuntu desktop!!!
+:ubuntu_22_04_01_auto
+goto failed
 
+# ubuntu 22.04 LTS live-server
+:ubuntu_22_04_01_live_server
+initrd http://192.168.87.8/ds/images_file/ubuntu/live_server_22_04_1/casper/initrd
+kernel http://192.168.87.8/ds/images_file/ubuntu/live_server_22_04_1/casper/vmlinuz
+imgargs vmlinuz root=/dev/ram0 boot=casper initrd=initrd ip=dhcp netboot=url url=http://192.168.87.8/ds/images/ubuntu-22.04.1-live-server-amd64.iso
+boot || goto failed
+
+# ubuntu 22.04 LTS live-server auto
+:ubuntu_22_04_01_live_server_auto
+initrd http://192.168.87.8/ds/images_file/ubuntu/live_server_22_04_1/casper/initrd
+kernel http://192.168.87.8/ds/images_file/ubuntu/live_server_22_04_1/casper/vmlinuz
+imgargs vmlinuz root=/dev/ram0 boot=casper initrd=initrd ip=dhcp netboot=url url=http://192.168.87.8/ds/images/ubuntu-22.04.1-live-server-amd64.iso autoinstall ds=nocloud-net;s=http://192.168.87.8/ds/autoinstall/ubuntu/22_04_01_live_server/
+boot || goto failed
