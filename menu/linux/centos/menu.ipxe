@@ -12,6 +12,8 @@ item centos7_3_0                        Install ${distribution} 7.3.0
 
 item centos7_9_0                        Install ${distribution} 7.9.0
 
+item centos7_9_0_auto                   Install ${distribution} 7.9.0 auto
+
 item
 
 
@@ -26,7 +28,7 @@ goto ${selected}
 set version 7_3_0
 goto centos
 
-# centos 7.9.0 -> uefi pass, legacy hang out on unable to mount root fs on ...
+# centos 7.9.0 -> uefi and legacy pass
 :centos7_9_0
 set version 7_9_0
 goto centos
@@ -44,3 +46,24 @@ set repo-url ${http-images-file-url}/${distribution}/${version}
 initrd ${initrd-url}
 kernel ${kernel-url} initrd=initrd.img inst.repo=${repo-url}
 boot || goto failed
+
+# auto
+# centos 7.9.0 
+:centos7_9_0_auto
+set version 7_9_0
+goto centos_auto
+
+:centos_auto
+# set url
+set initrd-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/initrd.img
+set kernel-url ${http-images-file-url}/${distribution}/${version}/images/pxeboot/vmlinuz
+set autoinstall-url ${http-autoinstall-url}/${distribution}/${version}/anaconda-ks.cfg
+
+# boot
+# common command like below
+# initrd http://192.168.87.8/ds/images_file/redhat/9_1_0/images/pxeboot/initrd.img
+# kernel http://192.168.87.8/ds/images_file/redhat/9_1_0/images/pxeboot/vmlinuz initrd=initrd.img inst.ks=http://192.168.87.8/ds/autoinstall/redhat/9_1_0/install.cfg
+initrd ${initrd-url}
+kernel ${kernel-url}  initrd=initrd.img inst.ks=${autoinstall-url}
+boot || goto failed
+
