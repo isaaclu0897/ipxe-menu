@@ -1,0 +1,40 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu VMware 6 Menu
+item
+
+item --key 1 vmware6u7-v460				(1) Select ESXI6 U7 - (v460-1)
+item --key 2 vmware6u7-v470				(2) Select ESXI6 U7 - (v470-1)
+item --key 3 vmware6u7-v480				(3) Select ESXI6 U7 - (v480-1)
+item vmware6u7-v481						Select ESXI6 U7 - (v481-1)
+item vmware6u7-v482						Select ESXI6 U7 - (v482-1)
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:vmware6u7-v460
+chain ${tftp-ipxe-url}/VMware/VMware6/vmware6u7-v460.ipxe || goto failed
+
+:vmware6u7-v470
+chain ${tftp-ipxe-url}/VMware/VMware6/vmware6u7-v470.ipxe || goto failed
+
+:vmware6u7-v480
+chain ${tftp-ipxe-url}/VMware/VMware6/vmware6u7-v480.ipxe || goto failed
+
+:vmware6u7-v481
+chain ${tftp-ipxe-url}/VMware/VMware6/vmware6u7-v481.ipxe || goto failed
+
+:vmware6u7-v482
+chain ${tftp-ipxe-url}/VMware/VMware6/vmware6u7-v482.ipxe || goto failed
+
+# ---
+
+:back
+chain ${tftp-ipxe-url}/VMware/menu.ipxe || goto failed

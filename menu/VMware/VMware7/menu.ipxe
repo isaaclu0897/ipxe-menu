@@ -1,0 +1,40 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu VMware 7 Menu
+item
+
+item --key 1 vmware7u1					(1) Select ESXI7 U1 - (v510-1)
+item --key 2 vmware7u2					(2) Select ESXI7 U2 - (v520-1)
+item --key 3 vmware7u3					(3) Select ESXI7 U3 - (v530-1)
+item vmware7u3m							Select ESXI7 U3m - (v531-1)
+item vmware7u3o							Select ESXI7 U3o - (v532-1)
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:vmware7u1
+chain ${tftp-ipxe-url}/VMware/VMware7/vmware7u1.ipxe || goto failed
+
+:vmware7u2
+chain ${tftp-ipxe-url}/VMware/VMware7/vmware7u2.ipxe || goto failed
+
+:vmware7u3
+chain ${tftp-ipxe-url}/VMware/VMware7/vmware7u3.ipxe || goto failed
+
+:vmware7u3m
+chain ${tftp-ipxe-url}/VMware/VMware7/vmware7u3m.ipxe || goto failed
+
+:vmware7u3o
+chain ${tftp-ipxe-url}/VMware/VMware7/vmware7u3o.ipxe || goto failed
+
+# ---
+
+:back
+chain ${tftp-ipxe-url}/VMware/menu.ipxe || goto failed

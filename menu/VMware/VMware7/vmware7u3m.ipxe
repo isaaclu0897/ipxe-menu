@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu VMware 7u3m Menu
+item
+
+item vmware7u3mi						Install ESXi7 U3m [interactive]
+item vmware7u3ma						Install ESXi7 U3m [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:vmware7u3mi
+set dist esxi && set version 7u3m && set auto false
+chain ${tftp-ipxe-url}/VMware/bootVMware.ipxe || goto failed
+
+:vmware7u3ma
+set dist esxi && set version 7u3m && set auto true
+chain ${tftp-ipxe-url}/VMware/bootVMware.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/VMware/VMware7/menu.ipxe || goto failed

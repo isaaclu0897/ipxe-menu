@@ -1,0 +1,32 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu VMware 8 Menu
+item
+
+item --key 0 vmware8u0					(0) Select ESXI8 U0 - (v550-1)
+item --key 1 vmware8u1a					(1) Select ESXI8 U1a - (v560-1)
+item --key 2 vmware8u2					(2) Select ESXI8 U2 - (v570-1)
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:vmware8u0
+chain ${tftp-ipxe-url}/VMware/VMware8/vmware8u0.ipxe || goto failed
+
+:vmware8u1a
+chain ${tftp-ipxe-url}/VMware/VMware8/vmware8u1a.ipxe || goto failed
+
+:vmware8u2
+chain ${tftp-ipxe-url}/VMware/VMware8/vmware8u2.ipxe || goto failed
+
+# ---
+
+:back
+chain ${tftp-ipxe-url}/VMware/menu.ipxe || goto failed

@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu VMware 6u7-v482 Menu
+item
+
+item vmware6u7-v482i					Install ESXi6 U7-v482 [interactive]
+item vmware6u7-v482a					Install ESXi6 U7-v482 [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:vmware6u7-v482i
+set dist esxi && set version 6u7-v482 && set auto false
+chain ${tftp-ipxe-url}/VMware/bootVMware.ipxe || goto failed
+
+:vmware6u7-v482a
+set dist esxi && set version 6u7-v482 && set auto true
+chain ${tftp-ipxe-url}/VMware/bootVMware.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/VMware/VMware6/menu.ipxe || goto failed

@@ -1,0 +1,33 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu VMware Menu
+item
+
+item --key 1 vmware6					(1) Select VMware 6
+item --key 2 vmware7					(2) Select VMware 7
+item --key 3 vmware8					(3) Select VMware 8
+item			
+
+item back								Back to previous page
+
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:vmware6
+chain ${tftp-ipxe-url}/VMware/VMware6/menu.ipxe || goto failed
+
+:vmware7
+chain ${tftp-ipxe-url}/VMware/VMware7/menu.ipxe || goto failed
+
+:vmware8
+chain ${tftp-ipxe-url}/VMware/VMware8/menu.ipxe || goto failed
+
+# ---
+
+:back
+chain ${tftp-ipxe-url}/menu.ipxe || goto failed

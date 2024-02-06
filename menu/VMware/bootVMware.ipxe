@@ -1,0 +1,46 @@
+#!ipxe
+
+###################### Variable ######################
+echo dist / version / auto = ${dist} / ${version} / ${auto}
+
+iseq ${platform} efi && set kernel-path efi/boot/bootx64.efi || set kernel-path mboot.c32
+set kernel-url ${http-images-file-url}/vmware/${dist}${version}/${kernel-path}
+set bootcfg-url ${http-autoinstall-url}/efi/${dist}${version}-boot.cfg
+set autoinstall-url ${http-autoinstall-url}/efi/esxi-ks.cfg
+
+# echo kernel-url = ${kernel-url}
+# echo bootcfg-url = ${bootcfg-url}
+# echo autoinstall-url = ${autoinstall-url}
+
+iseq ${auto} false && goto interactive ||
+iseq ${auto} true && goto autoinstall ||
+goto failed
+
+###################### BOOT ######################
+
+:interactive
+echo install ${dist}${version} via http (interactive)
+kernel ${kernel-url} -c ${bootcfg-url}
+boot ||
+goto failed
+
+:autoinstall
+echo install ${dist}${version} via http (auto)
+kernel ${kernel-url} -c ${bootcfg-url} ks=${autoinstall-url}
+boot ||
+goto failed
+
+###################### EXIT ######################
+
+:failed
+echo Booting failed, drop to iPXE shell
+echo Type 'exit', back to the main menu
+shell
+
+:clearVar
+set kernel-url && set bootcfg-url && set autoinstall-url
+set dist && set version && set auto
+imgfree
+
+:reload
+chain -r ${tftp-ipxe-url}/menu.ipxe

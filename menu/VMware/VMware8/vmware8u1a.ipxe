@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu VMware 8u1aa Menu
+item
+
+item vmware8u1ai						Install ESXi8 U1a [interactive]
+item vmware8u1aa						Install ESXi8 U1a [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:vmware8u1ai
+set dist esxi && set version 8u1a && set auto false
+chain ${tftp-ipxe-url}/VMware/bootVMware.ipxe || goto failed
+
+:vmware8u1aa
+set dist esxi && set version 8u1a && set auto true
+chain ${tftp-ipxe-url}/VMware/bootVMware.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/VMware/VMware8/menu.ipxe || goto failed
