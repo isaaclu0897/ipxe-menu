@@ -1,59 +1,103 @@
 #!ipxe
 
+# #############################################
+# Author: 		ISAAC
+# Project:		QADS
+# Create Date: 	2024.03.27
+# #############################################
+
+# ---
+
+set menu-branch master
+set menu-version 0.0.1
+
+iseq ${platform} pcbios && colour --basic 0 4 ||
 
 ###################### MAIN MENU ######################
 
-:main_menu
+:mainMenu
 menu Welcome to iPXE Deployment Service support for platform ${platform}
+item --gap --							${spx8}${spx8}${spx8}Menu Version: ${menu-branch}: ${menu-version}
 item
 
 item --gap --                           --- OS installation ---
-item --key w windows			Install WINDOWS
-item --key l linux                      Install LINUX (RHEL, SUSE ...)
-item
+item --key w windows                    (w) WINDOWS
+item --key l linux                      (l) LINUX (RHEL, OL, SUSE ...)
+item --key v vmware                     (v) VMWARE
 
-item --gap --				--- Tools ---
-item gparted				Gparted
+item --gap --							--- Tools ---
+item gparted							Gparted
+item
+item --key 0x08 exit                    Exit Service and continue boot
 item
 
 item --gap --                           --- Advanced options ---
-item --key c config                     show system information
-item --key s shell                      drop to iPXE shell
-item --key r reboot                     reboot system
-item reload				reload iPXE
+item --key c config						(c) config
+item --key s shell						(s) shell
+item --key r reload						(r) reload
+item ipxeEfi							ipxeEfi (default for efi)
+item snponlyEfi							snponlyEfi
+item ipxePxe							ipxePxe (default for pcbios)
+item undionlyKpxe						undionlyKpxe
 
 item
 item --key 0x08 exit        		Exit Service and continue boot
 
-choose --timeout ${menu-timeout} --default ${menu-default} selected || goto main_menu # if you cancel it, you will back to main menu
+choose --timeout ${menu-timeout} --default ${menu-default} selected || goto failed
 goto ${selected}
+
+###################### System Information ######################
+
+:systemInfo
+menu System Information
+item
+
+item --gap -- 							--- iPXE ---
+item -- --								Platform:	${platform}
+item -- --								ARCH:		${buildarch}
+item -- --								Version:	${version}
+item
+
+item --gap -- 							--- SUT ---
+item -- --								MAC: 		${netX/mac:hex}
+item -- --								IP:			${netX/ip}
+item
+
+item back								Back to previous page
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto mainMenu 
 
 ###################### Defined Command ######################
 
+:info
+goto systemInfo
+
 :config
 config
-goto back
+goto mainMenu
 
-:failed
-echo Booting failed, drop to iPXE shell
-# then keep going to shell
+:cancel
+echo You cancelled the menu, dropping to shell
+
 :shell
 echo Type 'exit', back to the main menu
 shell
-# then keep going to back
-:back
-goto main_menu
+goto reload
+
+:failed
+echo Booting failed, drop to iPXE shell
+goto shell
 
 :reboot
 reboot
-
-:reload
-chain ${http-menu-url}/menu.ipxe
 
 :exit
 exit
 
 ############ MAIN MENU ITEMS ############
+
+:reload
+chain -r ${tftp-ipxe-url}/menu.ipxe || goto failed
 
 :windows
 iseq ${platform} pcbios && goto windows-pcbios ||
@@ -61,17 +105,31 @@ iseq ${platform} efi && goto windows-efi ||
 goto failed
 
 :windows-pcbios
-set net0/next-server 192.168.87.10
-set net0/filename boot\x64\wdsnbp.com
-chain ${tftp-boot-url}\x64\wdsnbp.com || goto failed
+chain ${tftp-boot-url}/x64/wdsnbp.com || goto failed
 
 :windows-efi
-set net0/next-server 192.168.87.10
-set net0/filename boot\x64\wdsmgfw.efi
-chain ${tftp-boot-url}\x64\wdsmgfw.efi || goto failed
+chain ${tftp-boot-url}/x64/wdsmgfw.efi || goto failed
 
 :linux
-chain ${http-menu-url}/linux/menu.ipxe || goto failed
+chain ${tftp-ipxe-url}/Linux/menu.ipxe || goto failed
+
+:vmware
+chain ${tftp-ipxe-url}/VMware/menu.ipxe || goto failed
+
+:back
+chain ${tftp-ipxe-url}/menu.ipxe || goto failed
+
+:ipxeEfi
+chain -r ${tftp-ipxe-url}/bin/ipxe.efi
+
+:snponlyEfi
+chain -r ${tftp-ipxe-url}/bin/snponly.efi
+
+:ipxePxe
+chain -r ${tftp-ipxe-url}/bin/ipxe.pxe
+
+:undionlyKpxe
+chain -r ${tftp-ipxe-url}/bin/undionly.kpxe
 
 # gparted -> uefi pass, legacy failed
 :gparted

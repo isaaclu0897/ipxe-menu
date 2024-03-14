@@ -1,0 +1,42 @@
+#!ipxe
+
+# #############################################
+# Author: 		ISAAC
+# Project:		QADS
+# Create Date: 	2024.03.27
+# #############################################
+
+# ---
+
+# Don't git track "setting.example", as each environment expects its own setting.
+
+# ---
+
+# Quick Start
+# 1. Copy "settings.ipxe.example" to "<working folder>/settings.ipxe" 
+# 2. Edit "settings.ipxe" for your environment.
+# 3. Make sure DHCP server is chain to "settings.ipxe".
+
+# ---
+
+# Variables
+set tftp-url tftp://<tftp server>						# tftp root
+set tftp-boot-url ${tftp-url}/boot						# tftp root/boot
+set tftp-ipxe-url ${tftp-url}/boot/ipxe					# tftp root/boot/ipxe
+
+set http-url http://<http server>						# http root
+set http-images-file-url ${http-url}					# http images file root
+set http-autoinstall-url ${http-url}/autoinstall		# http autoinstall root
+
+# Const
+set sp:hex 20 && set sp ${sp:string}					# Space
+set spx4 ${sp}${sp}${sp}${sp}							# Spacex4
+set spx8 ${spx4}${spx4}									# Spacex8
+
+# Some menu defaults
+set menu-timeout 0
+set submenu-timeout ${menu-timeout}
+isset ${menu-default} || set menu-default exit
+isset ${submenu-default} || set submenu-default back
+
+chain ${tftp-ipxe-url}/menu/menu.ipxe || shell				# chain to your main menu
