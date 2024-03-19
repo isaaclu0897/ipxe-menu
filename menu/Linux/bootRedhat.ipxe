@@ -1,0 +1,49 @@
+#!ipxe
+
+echo dist / version / auto / kernelOpts = ${dist} / ${version} / ${auto} / ${kernelOpts}
+
+set initrd-url ${http-images-file-url}/${dist}${version}_em64t/images/pxeboot/initrd.img
+set kernel-url ${http-images-file-url}/${dist}${version}_em64t/images/pxeboot/vmlinuz
+set repo-url ${http-images-file-url}/${dist}${version}_em64t
+set autoinstall-url ${http-autoinstall-url}/${platform}/${dist}${version}-ks.cfg
+
+# echo initrd-url = ${initrd-url}
+# echo kernel-url = ${kernel-url}
+# echo repo-url = ${repo-url}
+# echo autoinstall-url = ${autoinstall-url}
+
+iseq ${auto} false && goto interactive ||
+iseq ${auto} true && goto autoinstall ||
+goto failed
+
+:interactive
+echo install ${dist}${version} via http (interactive)
+initrd ${initrd-url}
+kernel ${kernel-url} initrd=initrd.img splash=silent ${kernelOpts} inst.repo=${repo-url}
+boot ||
+goto failed
+
+:autoinstall
+echo install ${dist}${version} via http (auto)
+initrd ${initrd-url}
+kernel ${kernel-url} initrd=initrd.img splash=silent ${kernelOpts} inst.ks=${autoinstall-url}
+boot ||
+goto failed
+
+# Note. If you want to set multiple kernel parameters, please follow as below command
+# set kernelOpts kernelParam1${sp}kernelParam2{sp}kernelParam3
+
+# ---
+
+:failed
+echo Booting failed, drop to iPXE shell
+echo Type 'exit', back to the main menu
+shell
+
+:clearVar
+set initrd-url && set kernel-url && set repo-url && set autoinstall-url
+set dist && set version && set auto && set kernelOpts
+imgfree
+
+:reload
+chain -r ${tftp-ipxe-url}/menu.ipxe

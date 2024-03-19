@@ -1,0 +1,65 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Linux Menu
+item
+
+item --gap --               			--- Redhat ---
+item --key 1 redhat7					(1) Select Redhat 7
+item --key 2 redhat8					(2) Select Redhat 8
+item --key 3 redhat9					(3) Select Redhat 9
+item			
+
+item --gap --               			--- Oracle ---
+item --key 4 oracle7					(4) Select Oracle 7
+item --key 5 oracle8					(5) Select Oracle 8
+item --key 6 oracle9					(6) Select Oracle 9
+item			
+
+item --gap --               			--- Suse ---
+item --key 7 suse12						(7) Select Suse 12
+item --key 8 suse15						(8) Select Suse 15
+item			
+
+item back								Back to previous page
+
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat7
+chain ${tftp-ipxe-url}/Linux/Redhat7/menu.ipxe || goto failed
+
+:redhat8
+chain ${tftp-ipxe-url}/Linux/Redhat8/menu.ipxe || goto failed
+
+:redhat9
+chain ${tftp-ipxe-url}/Linux/Redhat9/menu.ipxe || goto failed
+
+# ---
+
+:oracle7
+chain ${tftp-ipxe-url}/Linux/Oracle7/menu.ipxe || goto failed
+
+:oracle8
+chain ${tftp-ipxe-url}/Linux/Oracle8/menu.ipxe || goto failed
+
+:oracle9
+chain ${tftp-ipxe-url}/Linux/Oracle9/menu.ipxe || goto failed
+
+
+# ---
+
+:suse12
+chain ${tftp-ipxe-url}/Linux/Suse12/menu.ipxe || goto failed
+
+:suse15
+chain ${tftp-ipxe-url}/Linux/Suse15/menu.ipxe || goto failed
+
+# ---
+
+:back
+chain ${tftp-ipxe-url}/menu.ipxe || goto failed

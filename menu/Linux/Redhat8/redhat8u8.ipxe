@@ -1,0 +1,42 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Redhat 8u8 Menu
+item
+
+item redhat8u8i							Install RHEL8 U8 [interactive]
+item redhat8u8a							Install RHEL8 U8 [automatically]
+item redhat8u8Nomodeseti				Install RHEL8 U8 (with nomodeset for AST2600) [interactive]
+item redhat8u8Nomodeseta				Install RHEL8 U8 (with nomodeset for AST2600) [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat8u8i
+set dist rhel && set version 8_u8 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+:redhat8u8a
+set dist rhel && set version 8_u8 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# ISSUE: The installer freezes on servers with ASPEED 2600
+# Link: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/8.8_release_notes/known-issues#known-issues-graphics-infrastructures
+:redhat8u8Nomodeseti
+set dist rhel && set version 8_u8 && set auto false && set kernelOpts nomodeset
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+:redhat8u8Nomodeseta
+set dist rhel && set version 8_u8 && set auto true && set kernelOpts nomodeset
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Redhat8/menu.ipxe || goto failed

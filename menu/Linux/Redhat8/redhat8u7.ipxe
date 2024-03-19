@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Redhat 8u7 Menu
+item
+
+item redhat8u7i							Install RHEL8 U7 [interactive]
+item redhat8u7a							Install RHEL8 U7 [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat8u7i
+set dist rhel && set version 8_u7 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+:redhat8u7a
+set dist rhel && set version 8_u7 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Redhat8/menu.ipxe || goto failed

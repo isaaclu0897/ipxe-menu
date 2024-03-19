@@ -1,0 +1,60 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Redhat 8 Menu
+item
+
+item --key 0 redhat8u0					(0) Select RHEL8 U0
+item --key 1 redhat8u1					(1) Select RHEL8 U1
+item --key 2 redhat8u2					(2) Select RHEL8 U2
+item --key 3 redhat8u3					(3) Select RHEL8 U3
+item --key 4 redhat8u4					(4) Select RHEL8 U4
+item --key 5 redhat8u5					(5) Select RHEL8 U5
+item --key 6 redhat8u6					(6) Select RHEL8 U6
+item --key 7 redhat8u7					(7) Select RHEL8 U7
+item --key 8 redhat8u8					(8) Select RHEL8 U8
+item --key 9 redhat8u9					(9) Select RHEL8 U9
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat8u0
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u0.ipxe || goto failed
+
+:redhat8u1
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u1.ipxe || goto failed
+
+:redhat8u2
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u2.ipxe || goto failed
+
+:redhat8u3
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u3.ipxe || goto failed
+
+:redhat8u4
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u4.ipxe || goto failed
+
+:redhat8u5
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u5.ipxe || goto failed
+
+:redhat8u6
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u6.ipxe || goto failed
+
+:redhat8u7
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u7.ipxe || goto failed
+
+:redhat8u8
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u8.ipxe || goto failed
+
+:redhat8u9
+chain ${tftp-ipxe-url}/Linux/Redhat8/redhat8u9.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/menu.ipxe || goto failed
