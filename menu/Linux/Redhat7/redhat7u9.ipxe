@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Redhat 7u9 Menu
+item
+
+item redhat7u9i							Install RHEL7 U9 [interactive]
+item redhat7u9a							Install RHEL7 U9 [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat7u9i
+set dist rhel && set version 7_u9 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+:redhat7u9a
+set dist rhel && set version 7_u9 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Redhat7/menu.ipxe || goto failed

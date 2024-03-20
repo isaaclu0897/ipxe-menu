@@ -1,0 +1,36 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Redhat 7 Menu
+item
+
+item --key 6 redhat7u6					(6) Select RHEL7 U6
+item --key 7 redhat7u7					(7) Select RHEL7 U7
+item --key 8 redhat7u8					(8) Select RHEL7 U8
+item --key 9 redhat7u9					(9) Select RHEL7 U9
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat7u6
+chain ${tftp-ipxe-url}/Linux/Redhat7/redhat7u6.ipxe || goto failed
+
+:redhat7u7
+chain ${tftp-ipxe-url}/Linux/Redhat7/redhat7u7.ipxe || goto failed
+
+:redhat7u8
+chain ${tftp-ipxe-url}/Linux/Redhat7/redhat7u8.ipxe || goto failed
+
+:redhat7u9
+chain ${tftp-ipxe-url}/Linux/Redhat7/redhat7u9.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/menu.ipxe || goto failed
