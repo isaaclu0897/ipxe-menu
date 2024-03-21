@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Redhat 9u2 Menu
+item
+
+item redhat9u2i							Install RHEL9 U2 [interactive]
+item redhat9u2a							Install RHEL9 U2 [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat9u2i
+set dist rhel && set version 9_u2 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+:redhat9u2a
+set dist rhel && set version 9_u2 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Redhat9/menu.ipxe || goto failed

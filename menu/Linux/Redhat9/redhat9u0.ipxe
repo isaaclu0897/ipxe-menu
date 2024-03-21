@@ -1,0 +1,37 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Redhat 9u0 Menu
+item
+
+item redhat9u0i							Install RHEL9 U0 [interactive]
+item redhat9u0a							Install RHEL9 U0 [automatically]
+item redhat9u0intremapOffa				Install RHEL9 U0 (with intremap off for VMD) [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:redhat9u0i
+set dist rhel && set version 9_u0 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+:redhat9u0a
+set dist rhel && set version 9_u0 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# ISSUE: Unable to Boot RHEL 8.7/9.0 if Intel VMD ( QA hasn't required on RHEL8.7 )
+# Link: https://www.intel.com/content/www/us/en/support/articles/000094684/memory-and-storage/datacenter-storage-solutions.html
+:redhat9u0intremapOffa
+set dist rhel && set version 9_u0 && set auto true && set kernelOpts intremap=off
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Redhat9/menu.ipxe || goto failed
