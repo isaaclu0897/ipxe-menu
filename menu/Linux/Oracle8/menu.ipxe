@@ -1,0 +1,60 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Oracle 8 Menu
+item
+
+item --key 0 oracle8u0					(0) Select OR8 U0
+item --key 1 oracle8u1					(1) Select OR8 U1
+item --key 2 oracle8u2					(2) Select OR8 U2
+item --key 3 oracle8u3					(3) Select OR8 U3
+item --key 4 oracle8u4					(4) Select OR8 U4
+item --key 5 oracle8u5					(5) Select OR8 U5
+item --key 6 oracle8u6					(6) Select OR8 U6
+item --key 7 oracle8u7					(7) Select OR8 U7
+item --key 8 oracle8u8					(8) Select OR8 U8
+item --key 9 oracle8u9					(9) Select OR8 U9
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:oracle8u0
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u0.ipxe || goto failed
+
+:oracle8u1
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u1.ipxe || goto failed
+
+:oracle8u2
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u2.ipxe || goto failed
+
+:oracle8u3
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u3.ipxe || goto failed
+
+:oracle8u4
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u4.ipxe || goto failed
+
+:oracle8u5
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u5.ipxe || goto failed
+
+:oracle8u6
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u6.ipxe || goto failed
+
+:oracle8u7
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u7.ipxe || goto failed
+
+:oracle8u8
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u8.ipxe || goto failed
+
+:oracle8u9
+chain ${tftp-ipxe-url}/Linux/Oracle8/oracle8u9.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/menu.ipxe || goto failed

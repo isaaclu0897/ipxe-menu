@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Oracle 8u7 Menu
+item
+
+item oracle8u7i							Install OR8 U7 [interactive]
+item oracle8u7a							Install OR8 U7 [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:oracle8u7i
+set dist or && set version 8_u7 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootOracle.ipxe || goto failed
+
+:oracle8u7a
+set dist or && set version 8_u7 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootOracle.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Oracle8/menu.ipxe || goto failed

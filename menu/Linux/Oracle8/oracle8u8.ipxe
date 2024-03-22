@@ -1,0 +1,42 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Oracle 8u8 Menu
+item
+
+item oracle8u8i							Install OR8 U8 [interactive]
+item oracle8u8a							Install OR8 U8 [automatically]
+item oracle8u8Nomodeseti				Install OR8 U8 (with nomodeset for AST2600) [interactive]
+item oracle8u8Nomodeseta				Install OR8 U8 (with nomodeset for AST2600) [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:oracle8u8i
+set dist or && set version 8_u8 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootOracle.ipxe || goto failed
+
+:oracle8u8a
+set dist or && set version 8_u8 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootOracle.ipxe || goto failed
+
+# ISSUE: The installer freezes on servers with ASPEED 2600
+# Link: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/8.8_release_notes/known-issues#known-issues-graphics-infrastructures
+:oracle8u8Nomodeseti
+set dist or && set version 8_u8 && set auto false && set kernelOpts nomodeset
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+:oracle8u8Nomodeseta
+set dist or && set version 8_u8 && set auto true && set kernelOpts nomodeset
+chain ${tftp-ipxe-url}/Linux/bootRedhat.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Oracle8/menu.ipxe || goto failed
