@@ -1,0 +1,32 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Oracle 7 Menu
+item
+
+item --key 7 oracle7u7					(7) Select OR7 U7
+item --key 8 oracle7u8					(8) Select OR7 U8
+item --key 9 oracle7u9					(9) Select OR7 U9
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:oracle7u7
+chain ${tftp-ipxe-url}/Linux/Oracle7/oracle7u7.ipxe || goto failed
+
+:oracle7u8
+chain ${tftp-ipxe-url}/Linux/Oracle7/oracle7u8.ipxe || goto failed
+
+:oracle7u9
+chain ${tftp-ipxe-url}/Linux/Oracle7/oracle7u9.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/menu.ipxe || goto failed
