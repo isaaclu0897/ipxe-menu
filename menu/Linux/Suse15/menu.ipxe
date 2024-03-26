@@ -1,0 +1,44 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Suse 15 Menu
+item
+
+item --key 0 suse15sp0					(0) Select SLES15 SP0
+item --key 1 suse15sp1					(1) Select SLES15 SP1
+item --key 2 suse15sp2					(2) Select SLES15 SP2
+item --key 3 suse15sp3					(3) Select SLES15 SP3
+item --key 4 suse15sp4					(4) Select SLES15 SP4
+item --key 5 suse15sp5					(5) Select SLES15 SP5
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### Defined Command ######################
+
+:suse15sp0
+chain ${tftp-ipxe-url}/Linux/Suse15/suse15sp0.ipxe || goto failed
+
+:suse15sp1
+chain ${tftp-ipxe-url}/Linux/Suse15/suse15sp1.ipxe || goto failed
+
+:suse15sp2
+chain ${tftp-ipxe-url}/Linux/Suse15/suse15sp2.ipxe || goto failed
+
+:suse15sp3
+chain ${tftp-ipxe-url}/Linux/Suse15/suse15sp3.ipxe || goto failed
+
+:suse15sp4
+chain ${tftp-ipxe-url}/Linux/Suse15/suse15sp4.ipxe || goto failed
+
+:suse15sp5
+chain ${tftp-ipxe-url}/Linux/Suse15/suse15sp5.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/menu.ipxe || goto failed

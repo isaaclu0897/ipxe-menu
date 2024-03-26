@@ -1,0 +1,46 @@
+#!ipxe
+
+echo dist / version / auto = ${dist} / ${version} / ${auto}
+
+set initrd-url ${http-images-file-url}/${dist}${version}_em64t/boot/x86_64/loader/initrd
+set kernel-url ${http-images-file-url}/${dist}${version}_em64t/boot/x86_64/loader/linux
+set repo-url ${http-images-file-url}/${dist}${version}_em64t
+isset ${autoinstall-url} || set autoinstall-url ${http-autoinstall-url}/${platform}/${dist}${version}-ai.xml
+
+# echo initrd-url = ${initrd-url}
+# echo kernel-url = ${kernel-url}
+# echo repo-url = ${repo-url}
+# echo autoinstall-url = ${autoinstall-url}
+
+iseq ${auto} false && goto interactive ||
+iseq ${auto} true && goto autoinstall ||
+goto failed
+
+:interactive
+echo install ${dist}${version} via http (interactive)
+initrd ${initrd-url}
+kernel ${kernel-url} initrd=initrd netdevice=${mac} install=${repo-url}
+boot ||
+goto failed
+
+:autoinstall
+echo install ${dist}${version} via http (auto)
+initrd ${initrd-url}
+kernel ${kernel-url} initrd=initrd netdevice=${mac} install=${repo-url} autoyast=${autoinstall-url}
+boot ||
+goto failed
+
+# ---
+
+:failed
+echo Booting failed, drop to iPXE shell
+echo Type 'exit', back to the main menu
+shell
+
+:clearVar
+set initrd-url && set kernel-url && set repo-url && set autoinstall-url
+set dist && set version && set auto
+imgfree
+
+:reload
+chain -r ${tftp-ipxe-url}/menu.ipxe

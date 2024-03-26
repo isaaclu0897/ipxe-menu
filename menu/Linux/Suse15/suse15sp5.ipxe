@@ -1,0 +1,37 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Suse 15sp5 Menu
+item
+
+item suse15sp5i							Install SLES15 SP5 [interactive]
+item suse15sp5a							Install SLES15 SP5 [automatically]
+item suse15sp5xena						Install SLES15 SP5 (with Xen Kernel) [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:suse15sp5i
+set dist sles && set version 15_sp5 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootSuse.ipxe || goto failed
+
+# Plan to remove this item, since suse15spxxena = suse15spxa + xen kernel
+:suse15sp5a
+set dist sles && set version 15_sp5 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootSuse.ipxe || goto failed
+
+:suse15sp5xena
+set dist sles && set version 15_sp5 && set auto true
+set autoinstall-url ${http-autoinstall-url}/${platform}/${dist}${version}-xen-ai.xml
+chain ${tftp-ipxe-url}/Linux/bootSuse.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Suse15/menu.ipxe || goto failed
