@@ -1,0 +1,30 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Suse 12sp5 Menu
+item
+
+item suse12sp5i							Install SLES12 SP5 [interactive]
+item suse12sp5a							Install SLES12 SP5 (with Xen Kernel) [automatically]
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### MAIN MENU ITEMS ######################
+
+:suse12sp5i
+set dist sles && set version 12_sp5 && set auto false
+chain ${tftp-ipxe-url}/Linux/bootSuse.ipxe || goto failed
+
+:suse12sp5a
+set dist sles && set version 12_sp5 && set auto true
+chain ${tftp-ipxe-url}/Linux/bootSuse.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/Suse12/menu.ipxe || goto failed

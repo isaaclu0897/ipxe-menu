@@ -1,0 +1,28 @@
+#!ipxe
+
+###################### MAIN MENU ######################
+
+menu Suse 12 Menu
+item
+
+item --key 4 suse12sp4					(4) Select SLES12 SP4
+item --key 5 suse12sp5					(5) Select SLES12 SP5
+item
+
+item back								Back to previous page
+
+choose --timeout ${submenu-timeout} --default ${submenu-default} selected || goto back
+goto ${selected}
+
+###################### Defined Command ######################
+
+:suse12sp4
+chain ${tftp-ipxe-url}/Linux/Suse12/suse12sp4.ipxe || goto failed
+
+:suse12sp5
+chain ${tftp-ipxe-url}/Linux/Suse12/suse12sp5.ipxe || goto failed
+
+# --- 
+
+:back
+chain ${tftp-ipxe-url}/Linux/menu.ipxe || goto failed
