@@ -32,7 +32,7 @@ PXE boot sequence loading iPXE from network.
 <img src="https://i.imgur.com/P0HERsr.png" width="400">
 
 ### iPXE Menu (Multi-OS Selection)
-<img src="https://i.imgur.com/lMeRq4T.png" width="400">
+<img src="https://i.imgur.com/lMeRq4T.png" width="400"> <img src="https://i.imgur.com/jEeb8Na.png" width="420">
 
 
 ## Quick Start
