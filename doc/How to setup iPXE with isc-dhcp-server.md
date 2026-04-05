@@ -1,6 +1,15 @@
 How to setup iPXE with isc-dhcp-server
 ===
 
+# TOC
+- [Prerequisites](#prerequisites)
+- [How to setup iPXE](#how-to-setup-ipxe)
+- [Step by Step](#step-by-step)
+  - [Create "settings.ipxe" for your environment.](#create-settingsipxe-for-your-environment)
+  - [Make the DHCP server chain to "settings.ipxe"](#make-the-dhcp-server-chain-to-settingsipxe)
+  - [Mount the Linux ISO images and the autoinstall files from project to HTTP Server](#mount-the-linux-iso-images-and-the-autoinstall-files-from-project-to-http-server)
+  - [Finish up](#finish-up)
+
 ### Prerequisites
 
 1. Prepare a HTTP Server for Linux ISO images and autoinstall files.
