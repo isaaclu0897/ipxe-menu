@@ -1,7 +1,19 @@
 How to setup PXE Boot Server on Ubuntu (using iPXE)
 ===
 
-[TOC]
+# TOC
+- [Summary](#summary)
+- [Prerequisites](#prerequisites)
+- [Environment](#environment)
+- [How to setup PXE Boot Server on Ubuntu](#how-to-setup-pxe-boot-server-on-ubuntu)
+- [Step by step](#step-by-step)
+  - [Install and Configure HTTP -> Apache2](#install-and-configure-http---apache2)
+  - [Install and Configure TFTP -> Dnsmasq](#install-and-configure-tftp---dnsmasq)
+  - [Clone iPXE from git and Configure](#clone-ipxe-from-git-and-configure)
+  - [DHCP assign IP and bootfile for TFTP (using Windows DHCP)](#dhcp-assign-ip-and-bootfile-for-tftp-using-windows-dhcp)
+  - [Perform PXE Boot and check it works](#perform-pxe-boot-and-check-it-works)
+  - [Finish up](#finish-up)
+- [Reference article](#reference-article)
 
 ### Summary
 iPXE is the leading open source network boot firmware.
@@ -43,7 +55,7 @@ Role: Client with DHCP IP
 6. Finish up
 
 pxe boot process
-![](https://i.imgur.com/mfyBXG0.png =500x)
+<img src="https://i.imgur.com/mfyBXG0.png" width="500">
 
 ### Step by step
 
@@ -87,7 +99,7 @@ pxe boot process
 > systemctl status apache2
 ```
 6.  Now you are able to use http service
-![](https://i.imgur.com/gPcbIS0.png =500x)
+<img src="https://i.imgur.com/gPcbIS0.png" width="500">
 
 #### Install and Configure TFTP -> Dnsmasq
 1. Install Apache2 from apt
@@ -300,15 +312,15 @@ Since DHCP settings are not the focus of this article, only screenshots and brie
 
 Use Windows DHCP to set parameters such as TFTP 066 IP, 067 Bootfile name, 003 router, etc.
 
-![](https://i.imgur.com/P2fPrzB.png =500x)
+<img src="https://i.imgur.com/P2fPrzB.png" width="500">
 
 
 #### Perform PXE Boot and check it works
-![](https://i.imgur.com/P0HERsr.png =500x)
+<img src="https://i.imgur.com/P0HERsr.png" width="500">
 
 
 #### Finish up
-![](https://i.imgur.com/lMeRq4T.png =500x)
+<img src="https://i.imgur.com/lMeRq4T.png" width="500">
 
 
 ### Reference article
